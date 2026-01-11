@@ -172,6 +172,30 @@ Enforce linear history and clean commits:
 
 This ensures every PR becomes a single, clean commit on `main` with a proper conventional commit message.
 
+#### Workflow Permissions
+
+Configure GitHub Actions permissions to allow Release Please to create pull requests:
+
+**For personal repositories:**
+
+1. Go to repository Settings → Actions → General
+2. Scroll down to **Workflow permissions**
+3. Select **"Read and write permissions"**
+4. Check **"Allow GitHub Actions to create and approve pull requests"**
+5. Click **Save**
+
+**For organization repositories:**
+
+If the workflow permissions option is greyed out in your repository settings, you need to configure this at the organization level:
+
+1. Go to your **organization** Settings → Actions → General (requires organization owner permissions)
+2. Scroll down to **Workflow permissions**
+3. Select **"Read and write permissions"**
+4. Check **"Allow GitHub Actions to create and approve pull requests"**
+5. Click **Save**
+
+Without these settings, the Release Please workflow will fail with: `GitHub Actions is not permitted to create or approve pull requests`
+
 ### Claude Code GitHub Actions
 
 Enable Claude to respond to `@claude` mentions in PRs and issues:
