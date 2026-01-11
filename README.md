@@ -71,7 +71,7 @@ This template includes GitHub Actions workflows for continuous integration and r
 
 ### Conventional Commits
 
-This template uses [release-please](https://github.com/googleapis/release-please) for automated releases. Use [conventional commits](https://www.conventionalcommits.org/) to trigger version bumps:
+This template uses [release-please](https://github.com/googleapis/release-please) for automated releases. Use [conventional commits](https://www.conventionalcommits.org/) to trigger version bumps.
 
 | Commit prefix | Version bump  | Description                                         |
 | ------------- | ------------- | --------------------------------------------------- |
@@ -121,7 +121,10 @@ To enable PyPI publishing:
 
    - Go to your repo Settings → Environments
    - Create a new environment named `pypi`
-   - Optionally add protection rules (required reviewers, etc.)
+   - Under "Deployment branches and tags":
+     - Select "Selected branches and tags"
+     - Click "Add deployment branch or tag rule"
+     - Set "Ref type" to "Branch and "Name pattern" to "main"
 
 4. **First publish**: The first release will register your package on PyPI using the pending publisher you created.
 
@@ -132,6 +135,42 @@ If you don't want to publish to PyPI, simply delete:
 - `.github/workflows/publish.yml`
 
 The CI and release-please workflows will continue to work independently.
+
+### GitHub Repository Settings
+
+#### Branch Protection Rules
+
+Protect your `main` branch to prevent accidental pushes and ensure code quality:
+
+1. Go to Settings → Branches → Add classic branch protection rule
+2. Branch name pattern: `main`
+3. Enable the following:
+   - **Require a pull request before merging**
+     - Require approvals: 1
+     - Dismiss stale pull request approvals when new commits are pushed
+   - **Require status checks to pass before merging**
+     - Require branches to be up to date before merging
+     - Add status checks (after your first CI run):
+       - `Lint & Format`
+       - `Type Check`
+       - `Test`
+   - **Require linear history**
+
+These rules ensure all code goes through PR review and passes CI checks before merging to `main`.
+
+#### Pull Request Settings
+
+Enforce linear history and clean commits:
+
+1. Go to Settings → General → Pull Requests
+2. Check the following:
+   - Allow squash merging
+   - Automatically delete head branches
+3. Uncheck the following:
+   - Allow merge commits
+   - Allow rebase merging
+
+This ensures every PR becomes a single, clean commit on `main` with a proper conventional commit message.
 
 ### Claude Code GitHub Actions
 
