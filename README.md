@@ -1,6 +1,6 @@
 # Python Template
 
-A minimalistic template for [Cursor](https://cursor.com/en)/[VSCode](https://code.visualstudio.com/) Python projects.
+A minimalistic template for Python projects that use [Cursor](https://cursor.com/en)/[VSCode](https://code.visualstudio.com/) and [Claude Code](https://code.claude.com/docs/en/overview).
 Uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.sh/ruff/), and [mypy](https://mypy-lang.org/).
 
 ## Prerequisites
@@ -20,6 +20,10 @@ Uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.sh/ruff/), and
 - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 - [Mypy](https://marketplace.visualstudio.com/items?itemName=matangover.mypy)
+
+### Claude Code
+
+- [Claude Code](https://code.claude.com/docs/en/overview)
 
 ## Set up
 
@@ -69,20 +73,20 @@ This template includes GitHub Actions workflows for continuous integration and r
 
 This template uses [release-please](https://github.com/googleapis/release-please) for automated releases. Use [conventional commits](https://www.conventionalcommits.org/) to trigger version bumps:
 
-| Commit prefix | Version bump  | Description                                              |
-| ------------- | ------------- | -------------------------------------------------------- |
-| `feat!:`      | Major (x.0.0) | Breaking changes that require major version bump         |
-| `feat:`       | Minor (0.x.0) | New features that add functionality                      |
-| `fix:`        | Patch (0.0.x) | Bug fixes                                                |
-| `perf:`       | Patch (0.0.x) | Performance improvements                                 |
-| `build:`      | None          | Build system or dependency changes                       |
-| `chore:`      | None          | Maintenance tasks that don't affect production code      |
-| `ci:`         | None          | CI/CD configuration changes                              |
-| `docs:`       | None          | Documentation updates                                    |
-| `refactor:`   | None          | Code restructuring without behavior changes              |
-| `revert:`     | None          | Reverting previous commits                               |
-| `style:`      | None          | Code formatting changes                                  |
-| `test:`       | None          | Adding or updating tests                                 |
+| Commit prefix | Version bump  | Description                                         |
+| ------------- | ------------- | --------------------------------------------------- |
+| `feat!:`      | Major (x.0.0) | Breaking changes that require major version bump    |
+| `feat:`       | Minor (0.x.0) | New features that add functionality                 |
+| `fix:`        | Patch (0.0.x) | Bug fixes                                           |
+| `perf:`       | Patch (0.0.x) | Performance improvements                            |
+| `build:`      | None          | Build system or dependency changes                  |
+| `chore:`      | None          | Maintenance tasks that don't affect production code |
+| `ci:`         | None          | CI/CD configuration changes                         |
+| `docs:`       | None          | Documentation updates                               |
+| `refactor:`   | None          | Code restructuring without behavior changes         |
+| `revert:`     | None          | Reverting previous commits                          |
+| `style:`      | None          | Code formatting changes                             |
+| `test:`       | None          | Adding or updating tests                            |
 
 ### Releases
 
@@ -128,6 +132,17 @@ If you don't want to publish to PyPI, simply delete:
 - `.github/workflows/publish.yml`
 
 The CI and release-please workflows will continue to work independently.
+
+### Claude Code GitHub Actions
+
+Enable Claude to respond to `@claude` mentions in PRs and issues:
+
+```bash
+claude
+/install-github-app
+```
+
+This installs the Claude GitHub App and configures the workflow. Once set up, mention `@claude` in any PR or issue comment to get AI assistance with code reviews, bug fixes, and feature implementation.
 
 ## Project Structure
 
