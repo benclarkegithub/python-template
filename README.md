@@ -23,159 +23,132 @@ Uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.sh/ruff/), and
 
 ## Set up
 
-1. Initialise uv
+1. Copy (not clone) this template to your new project
+
+2. Rename the package directory:
 
 ```bash
-uv init
+mv src/package_name src/new_package_name
 ```
 
-2. Add development packages
+3. Update the following files with your package name:
+
+   - `pyproject.toml`: Update `name`, `authors`, `project.urls`, and `tool.hatch.version.path`
+   - `release-please-config.json`: Update `package-name` and `extra-files` path
+   - `src/new_package_name/__init__.py`: Update import
+   - `tests/test_version.py`: Update import
+
+4. Initialise the project:
 
 ```bash
-uv add --dev ruff mypy
+uv sync
 ```
 
-3. Add the below sections to your `pyproject.toml`:
-
-```
-[tool.ruff]
-target-version = "py313"
-line-length = 100
-
-[tool.mypy]
-python_version = "3.13"
-strict = true
-```
-
-4. Add `.vscode/settings` to your folder
-
-That's it!
-
-## Optional: Set up for PyPI Publishing
-
-If you want to publish your package to PyPI, follow these additional steps:
-
-### 1. Add build system to `pyproject.toml`
-
-Add this at the top of your `pyproject.toml`:
-
-```toml
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-```
-
-### 2. Update project metadata
-
-Update your `[project]` section with publishing metadata:
-
-```toml
-[project]
-name = "your-package-name"
-dynamic = ["version"]  # Changed from static version
-description = "Your package description"
-readme = "README.md"
-requires-python = ">=3.13"
-license = "Apache-2.0"  # Or your chosen license
-keywords = ["keyword1", "keyword2", "keyword3"]
-authors = [
-  { name = "Your Name", email = "your.email@example.com" },
-]
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
-]
-dependencies = [
-  # Your runtime dependencies
-]
-
-[dependency-groups]
-dev = [
-    "mypy>=1.19.1",
-    "ruff>=0.14.10",
-]
-```
-
-### 3. Create package structure
-
-Create a `src/` directory with your package:
+5. Run the checks:
 
 ```bash
-mkdir -p src/your_package_name
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy .
+uv run pytest
 ```
 
-### 4. Add version file
+## CI/CD
 
-Create `src/your_package_name/__about__.py`:
+This template includes GitHub Actions workflows for continuous integration and release automation.
 
-```python
-# SPDX-FileCopyrightText: 2025-present Your Name <your.email@example.com>
-#
-# SPDX-License-Identifier: Apache-2.0
-__version__ = "0.1.0"
+### Workflows
+
+| Workflow           | Trigger           | Description                               |
+| ------------------ | ----------------- | ----------------------------------------- |
+| **CI**             | Push/PR to main   | Runs ruff, mypy, and pytest with coverage |
+| **Release Please** | Push to main      | Creates release PRs with changelogs       |
+| **Publish**        | Release published | Publishes to PyPI (optional)              |
+
+### Conventional Commits
+
+This template uses [release-please](https://github.com/googleapis/release-please) for automated releases. Use [conventional commits](https://www.conventionalcommits.org/) to trigger version bumps:
+
+| Commit prefix | Version bump  | Description                                              |
+| ------------- | ------------- | -------------------------------------------------------- |
+| `feat!:`      | Major (x.0.0) | Breaking changes that require major version bump         |
+| `feat:`       | Minor (0.x.0) | New features that add functionality                      |
+| `fix:`        | Patch (0.0.x) | Bug fixes                                                |
+| `perf:`       | Patch (0.0.x) | Performance improvements                                 |
+| `build:`      | None          | Build system or dependency changes                       |
+| `chore:`      | None          | Maintenance tasks that don't affect production code      |
+| `ci:`         | None          | CI/CD configuration changes                              |
+| `docs:`       | None          | Documentation updates                                    |
+| `refactor:`   | None          | Code restructuring without behavior changes              |
+| `revert:`     | None          | Reverting previous commits                               |
+| `style:`      | None          | Code formatting changes                                  |
+| `test:`       | None          | Adding or updating tests                                 |
+
+### Releases
+
+1. Make commits using conventional commit format
+2. Push to `main` branch
+3. Release Please automatically creates/updates a Release PR
+4. When ready, merge the Release PR
+5. A GitHub Release is created automatically
+6. If configured, the package is published to PyPI
+
+### Publishing
+
+#### Enable Publishing
+
+The `publish.yml` workflow is included but requires setup.
+
+To enable PyPI publishing:
+
+1. **Create a PyPI account** at https://pypi.org
+
+2. **Add Trusted Publisher on PyPI**:
+
+   - Go to https://pypi.org/manage/account/publishing/
+   - Add a new Pending Trusted Publisher:
+     - **PyPI project name**: your-package-name
+     - **Owner**: your-github-username
+     - **Repository**: your-repo-name
+     - **Workflow name**: `publish.yml`
+     - **Environment name**: `pypi`
+
+3. **Create GitHub Environment**:
+
+   - Go to your repo Settings → Environments
+   - Create a new environment named `pypi`
+   - Optionally add protection rules (required reviewers, etc.)
+
+4. **First publish**: The first release will register your package on PyPI using the pending publisher you created.
+
+#### Disable Publishing
+
+If you don't want to publish to PyPI, simply delete:
+
+- `.github/workflows/publish.yml`
+
+The CI and release-please workflows will continue to work independently.
+
+## Project Structure
+
 ```
-
-### 5. Add package init file
-
-Create `src/your_package_name/__init__.py`:
-
-```python
-# SPDX-FileCopyrightText: 2025-present Your Name <your.email@example.com>
-#
-# SPDX-License-Identifier: Apache-2.0
-from your_package_name.__about__ import __version__
-
-__all__ = ["__version__"]
-```
-
-### 6. Configure hatch version and environments
-
-Add these sections to `pyproject.toml`:
-
-```toml
-[project.urls]
-Documentation = "https://github.com/yourusername/your-repo#readme"
-Issues = "https://github.com/yourusername/your-repo/issues"
-Source = "https://github.com/yourusername/your-repo"
-
-[tool.hatch.version]
-path = "src/your_package_name/__about__.py"
-
-[tool.hatch.envs.types]
-extra-dependencies = [
-  "mypy>=1.0.0",
-]
-[tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/your_package_name}"
-
-[tool.hatch.envs.lint]
-extra-dependencies = [
-  "ruff"
-]
-[tool.hatch.envs.lint.scripts]
-check = "ruff check {args:src/your_package_name}"
-format = "ruff format {args:src/your_package_name}"
-```
-
-### 7. Build and publish
-
-Build your package:
-
-```bash
-uv build
-```
-
-Publish to PyPI (requires PyPI account and token):
-
-```bash
-uv publish
-```
-
-Or publish to TestPyPI first:
-
-```bash
-uv publish --publish-url https://test.pypi.org/legacy/
+your-project/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml              # Lint, typecheck, test
+│       ├── release-please.yml  # Automated releases
+│       └── publish.yml         # PyPI publishing (optional)
+├── src/
+│   └── package_name/
+│       ├── __init__.py
+│       └── __about__.py        # Version (updated by release-please)
+├── tests/
+│   ├── __init__.py
+│   └── test_version.py
+├── .vscode/
+│   └── settings.json
+├── pyproject.toml
+├── release-please-config.json
+├── .release-please-manifest.json
+└── README.md
 ```
