@@ -7,7 +7,7 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "generic",
+          "type": "python",
           "path": "src/package_name/__about__.py"
         }
       ]
