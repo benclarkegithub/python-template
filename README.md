@@ -124,9 +124,9 @@ To enable PyPI publishing:
    - Under "Deployment branches and tags":
      - Select "Selected branches and tags"
      - Click "Add deployment branch or tag rule"
-     - Set "Ref type" to "Branch and "Name pattern" to "main"
+     - Set "Ref type" to "Tag" and "Name pattern" to `*-v*` (matches `package-name-v1.0.0`)
 
-4. **First publish**: The first release will register your package on PyPI using the pending publisher you created.
+The first release will register your package on PyPI using the pending publisher you created.
 
 #### Disable Publishing
 
