@@ -25,7 +25,35 @@ Uses [uv](https://docs.astral.sh/uv/), [ruff](https://docs.astral.sh/ruff/), and
 
 - [Claude Code](https://code.claude.com/docs/en/overview)
 
-## Set up
+## Basic Set Up
+
+1. Initialise uv
+
+```bash
+uv init
+```
+
+2. Add development packages
+
+```bash
+uv add --dev ruff mypy
+```
+
+3. Add the below sections to your `pyproject.toml`:
+
+```
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+```
+
+4. Add `.vscode/settings` to your folder
+
+## Advanced Set Up
 
 1. Copy (not clone) this template to your new project
 
@@ -57,11 +85,11 @@ uv run mypy .
 uv run pytest
 ```
 
-## CI/CD
+### CI/CD
 
 This template includes GitHub Actions workflows for continuous integration and release automation.
 
-### Workflows
+#### Workflows
 
 | Workflow           | Trigger           | Description                               |
 | ------------------ | ----------------- | ----------------------------------------- |
@@ -69,7 +97,7 @@ This template includes GitHub Actions workflows for continuous integration and r
 | **Release Please** | Push to main      | Creates release PRs with changelogs       |
 | **Publish**        | Release published | Publishes to PyPI (optional)              |
 
-### Conventional Commits
+#### Conventional Commits
 
 This template uses [release-please](https://github.com/googleapis/release-please) for automated releases. Use [conventional commits](https://www.conventionalcommits.org/) to trigger version bumps.
 
@@ -88,7 +116,7 @@ This template uses [release-please](https://github.com/googleapis/release-please
 | `style:`      | None          | Code formatting changes                             |
 | `test:`       | None          | Adding or updating tests                            |
 
-### Releases
+#### Releases
 
 1. Make commits using conventional commit format
 2. Push to `main` branch
@@ -97,9 +125,9 @@ This template uses [release-please](https://github.com/googleapis/release-please
 5. A GitHub Release is created automatically
 6. If configured, the package is published to PyPI
 
-### Publishing
+#### Publishing
 
-#### Enable Publishing
+##### Enable Publishing
 
 The `publish.yml` workflow is included but requires setup.
 
@@ -128,7 +156,7 @@ To enable PyPI publishing:
 
 The first release will register your package on PyPI using the pending publisher you created.
 
-#### Disable Publishing
+##### Disable Publishing
 
 If you don't want to publish to PyPI, simply delete:
 
@@ -136,9 +164,9 @@ If you don't want to publish to PyPI, simply delete:
 
 The CI and release-please workflows will continue to work independently.
 
-### GitHub Repository Settings
+#### GitHub Repository Settings
 
-#### Branch Protection Rules
+##### Branch Protection Rules
 
 Protect your `main` branch to prevent accidental pushes and ensure code quality:
 
@@ -158,7 +186,7 @@ Protect your `main` branch to prevent accidental pushes and ensure code quality:
 
 These rules ensure all code goes through PR review and passes CI checks before merging to `main`.
 
-#### Pull Request Settings
+##### Pull Request Settings
 
 Enforce linear history and clean commits:
 
@@ -172,7 +200,7 @@ Enforce linear history and clean commits:
 
 This ensures every PR becomes a single, clean commit on `main` with a proper conventional commit message.
 
-#### Workflow Permissions
+##### Workflow Permissions
 
 Configure GitHub Actions permissions to allow Release Please to create pull requests:
 
@@ -196,7 +224,7 @@ If the workflow permissions option is greyed out in your repository settings, yo
 
 Without these settings, the Release Please workflow will fail with: `GitHub Actions is not permitted to create or approve pull requests`
 
-### Claude Code GitHub Actions
+#### Claude Code GitHub Actions
 
 Enable Claude to respond to `@claude` mentions in PRs and issues:
 
