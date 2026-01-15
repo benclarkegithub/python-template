@@ -91,11 +91,10 @@ This template includes GitHub Actions workflows for continuous integration and r
 
 #### Workflows
 
-| Workflow           | Trigger           | Description                               |
-| ------------------ | ----------------- | ----------------------------------------- |
-| **CI**             | Push/PR to main   | Runs ruff, mypy, and pytest with coverage |
-| **Release Please** | Push to main      | Creates release PRs with changelogs       |
-| **Publish**        | Release published | Publishes to PyPI (optional)              |
+| Workflow           | Trigger         | Description                                                       |
+| ------------------ | --------------- | ----------------------------------------------------------------- |
+| **CI**             | Push/PR to main | Runs ruff, mypy, and pytest with coverage                         |
+| **Release Please** | Push to main    | Creates releases with changelogs and publishes to PyPI (optional) |
 
 #### Conventional Commits
 
@@ -122,14 +121,13 @@ This template uses [release-please](https://github.com/googleapis/release-please
 2. Push to `main` branch
 3. Release Please automatically creates/updates a Release PR
 4. When ready, merge the Release PR
-5. A GitHub Release is created automatically
-6. If configured, the package is published to PyPI
+5. A GitHub Release is created and (if configured) the package is published to PyPI automatically
 
 #### Publishing
 
 ##### Enable Publishing
 
-The `publish.yml` workflow is included but requires setup.
+The `release-please.yml` workflow includes PyPI publishing but requires setup.
 
 To enable PyPI publishing:
 
@@ -142,27 +140,19 @@ To enable PyPI publishing:
      - **PyPI project name**: your-package-name
      - **Owner**: your-github-username
      - **Repository**: your-repo-name
-     - **Workflow name**: `publish.yml`
+     - **Workflow name**: `release-please.yml`
      - **Environment name**: `pypi`
 
 3. **Create GitHub Environment**:
 
    - Go to your repo Settings → Environments
    - Create a new environment named `pypi`
-   - Under "Deployment branches and tags":
-     - Select "Selected branches and tags"
-     - Click "Add deployment branch or tag rule"
-     - Set "Ref type" to "Tag" and "Name pattern" to `*-v*` (matches `package-name-v1.0.0`)
 
 The first release will register your package on PyPI using the pending publisher you created.
 
 ##### Disable Publishing
 
-If you don't want to publish to PyPI, simply delete:
-
-- `.github/workflows/publish.yml`
-
-The CI and release-please workflows will continue to work independently.
+If you don't want to publish to PyPI, remove the `build` and `publish` jobs from `.github/workflows/release-please.yml`. The release workflow will still create GitHub releases with changelogs.
 
 #### GitHub Repository Settings
 
@@ -242,8 +232,7 @@ your-project/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml              # Lint, typecheck, test
-│       ├── release-please.yml  # Automated releases
-│       └── publish.yml         # PyPI publishing (optional)
+│       └── release-please.yml  # Automated releases + PyPI publishing
 ├── src/
 │   └── package_name/
 │       ├── __init__.py
