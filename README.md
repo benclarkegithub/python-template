@@ -51,7 +51,7 @@ python_version = "3.13"
 strict = true
 ```
 
-4. Add `.vscode/settings` to your folder
+4. Add `.vscode/settings.json` to your folder
 
 ## Advanced Set Up
 
